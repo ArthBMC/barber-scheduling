@@ -1,11 +1,13 @@
 package com.barber.schedule.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Setter
@@ -20,11 +22,15 @@ public class Client implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Integer phone;
+    private String phone;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "client")
+    private List<Booking> bookings;
 
     public Client(){}
 
-    public Client(Long id, String name, Integer phone) {
+    public Client(Long id, String name, String phone) {
         this.id = id;
         this.name = name;
         this.phone = phone;
