@@ -12,7 +12,7 @@ import java.util.Objects;
 @Getter
 @Entity
 @Table(name = "tb_client")
-public class User implements Serializable {
+public class Client implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -22,9 +22,9 @@ public class User implements Serializable {
     private String name;
     private Integer phone;
 
-    public User(){}
+    public Client(){}
 
-    public User(Long id, String name, Integer phone) {
+    public Client(Long id, String name, Integer phone) {
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -33,8 +33,8 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id);
+        Client client = (Client) o;
+        return Objects.equals(id, client.id);
     }
 
     @Override
