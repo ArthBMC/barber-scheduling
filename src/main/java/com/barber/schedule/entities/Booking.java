@@ -30,15 +30,20 @@ public class Booking implements Serializable {
     @JoinColumn(name = "client_id")
     private Client client;
 
+    @ManyToOne
+    @JoinColumn(name = "id_service")
+    private ServiceType serviceType;
+
     private Integer bookingStatus;
 
     public Booking(){}
 
-    public Booking(Long id, Instant moment, BookingStatus bookingStatus, Client client) {
+    public Booking(Long id, Instant moment, BookingStatus bookingStatus, Client client, ServiceType serviceType) {
         this.id = id;
         this.moment = moment;
         this.client = client;
         setBookingStatus(bookingStatus);
+        this.serviceType = serviceType;
     }
 
     public BookingStatus getBookingStatus(){
