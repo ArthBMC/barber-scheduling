@@ -36,5 +36,11 @@ public class BookingResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
+    @GetMapping(value = "/history")
+    public ResponseEntity<List<Booking>> findHistory(@RequestParam String phone) {
+        List<Booking> bookings = bookingService.findHistoryByPhone(phone);
+        return ResponseEntity.ok().body(bookings);
+    }
+
 }
 

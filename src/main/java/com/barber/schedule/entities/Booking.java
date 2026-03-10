@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -24,11 +25,15 @@ public class Booking implements Serializable {
     private Long id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private Instant moment;
+    private LocalDateTime moment;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "barber_id")
+    private Barber barber;
 
     @ManyToOne
     @JoinColumn(name = "id_service")
@@ -38,12 +43,13 @@ public class Booking implements Serializable {
 
     public Booking(){}
 
-    public Booking(Long id, Instant moment, BookingStatus bookingStatus, Client client, ServiceType serviceType) {
+    public Booking(Long id, LocalDateTime moment, BookingStatus bookingStatus, Client client, ServiceType serviceType, Barber barber) {
         this.id = id;
         this.moment = moment;
         this.client = client;
         setBookingStatus(bookingStatus);
         this.serviceType = serviceType;
+        this.barber = barber;
     }
 
     public BookingStatus getBookingStatus(){

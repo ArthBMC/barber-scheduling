@@ -1,5 +1,6 @@
 package com.barber.schedule.config;
 
+import com.barber.schedule.entities.Barber;
 import com.barber.schedule.entities.Booking;
 import com.barber.schedule.entities.Client;
 import com.barber.schedule.entities.ServiceType;
@@ -37,9 +38,9 @@ public class TestConfig implements CommandLineRunner {
         ServiceType s2 = new ServiceType(null, "Barba", "Barba feita", 15.0, 20);
         serviceTypeRepository.saveAll(Arrays.asList(s1, s2));
 
-        Booking b1 = new Booking(null, Instant.parse("2019-07-21T03:42:10Z"), BookingStatus.WAITING_CONFIRMATION, c1, s1);
-        Booking b2 = new Booking(null, Instant.parse("2019-07-21T03:42:10Z"), BookingStatus.CONCLUDED, c1, s1);
-        Booking b3 = new Booking(null, Instant.parse("2019-07-21T03:42:10Z"), BookingStatus.CONFIRMED, c2, s2);
+        Booking b1 = new Booking(null, Instant.parse("2019-07-21T03:42:10Z"), BookingStatus.WAITING_CONFIRMATION, c1, s1, new Barber("Pedro", "aasdad"));
+        Booking b2 = new Booking(null, Instant.parse("2019-07-21T03:42:10Z"), BookingStatus.CONCLUDED, c1, s1, new Barber("Diego", "gsfsdsdf"));
+        Booking b3 = new Booking(null, Instant.parse("2019-07-21T03:42:10Z"), BookingStatus.CONFIRMED, c2, s2, new Barber("Pedro", "aasdad"));
         bookingRepository.saveAll(Arrays.asList(b1, b2, b3));
 
 

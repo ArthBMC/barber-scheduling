@@ -27,4 +27,8 @@ public class BookingService {
         return bookingRepository.save(obj);
     }
 
+    public List<Booking> findHistoryByPhone(String phone){
+        return bookingRepository.findByClientPhoneOrderByMomentDesc(phone);
+    }
+
 }
