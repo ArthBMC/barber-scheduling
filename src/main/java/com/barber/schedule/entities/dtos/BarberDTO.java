@@ -1,4 +1,5 @@
 package com.barber.schedule.entities.dtos;
 
-public class BarberDTO {
+public record BarberDTO
+        (String name, String avatarUrl, String username, String password) {
 }

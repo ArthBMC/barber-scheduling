@@ -1,7 +1,11 @@
 package com.barber.schedule.services;
 
+import com.barber.schedule.entities.Barber;
 import com.barber.schedule.entities.User;
+import com.barber.schedule.entities.dtos.BarberDTO;
+import com.barber.schedule.repositories.BarberRepository;
 import com.barber.schedule.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +17,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BarberRepository barberRepository;
 
     public List<User> findAll(){
         return userRepository.findAll();
@@ -23,12 +29,19 @@ public class UserService {
         return obj.get();
     }
 
-    public User insert(User obj){
-        return userRepository.save(obj);
+    @Transactional
+    public User registerNewBarber(BarberDTO barberDTO){
+        Barber barber = new Barber(barberDTO.name(), barberDTO.avatarUrl());
+        barberRepository.save(barber);
+
+        User baberUser = new User();
+        baberUser.setUsername(barberDTO.username());
+        baberUser.setPassword(barberDTO.password());
+        baberUser.setRole("BARBER");
+        baberUser.setBarber(barber);
+        return userRepository.save(baberUser);
     }
 
-    public void delete(Long id){
-        userRepository.deleteById(id);
-    }
+
 
 }

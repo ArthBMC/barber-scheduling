@@ -1,8 +1,7 @@
 package com.barber.schedule.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +12,14 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Barber extends User implements Serializable {
+@Table(name = "tb_barber")
+public class Barber implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String avatarUrl;
 
