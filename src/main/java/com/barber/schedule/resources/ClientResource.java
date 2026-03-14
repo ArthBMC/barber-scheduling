@@ -1,5 +1,6 @@
 package com.barber.schedule.resources;
 
+import com.barber.schedule.entities.Booking;
 import com.barber.schedule.entities.Client;
 import com.barber.schedule.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,12 @@ public class ClientResource {
     public ResponseEntity<Client> findById(@PathVariable Long id){
         Client obj = clientService.findById(id);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @GetMapping(value = "/")
+    public ResponseEntity<Client> findByPhone(@RequestParam String phone) {
+        Client client = clientService.findByPhone(phone);
+        return ResponseEntity.ok().body(client);
     }
 
     @PostMapping

@@ -2,13 +2,17 @@ package com.barber.schedule.resources;
 
 import com.barber.schedule.entities.Booking;
 import com.barber.schedule.entities.dtos.BookingDTO;
+import com.barber.schedule.entities.enums.BookingStatus;
 import com.barber.schedule.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -37,9 +41,30 @@ public class BookingResource {
         return ResponseEntity.created(uri).body(booking);
     }
 
+    @PutMapping(value = "/{id}/cancel")
+    public ResponseEntity<Void> cancel(@PathVariable Long id){
+        bookingService.cancel(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(value = "/{id}/status")
+    public ResponseEntity<Void> updateStatus(@PathVariable Long id,
+                                             @RequestParam BookingStatus status){
+        bookingService.updateStatus(id, status);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping(value = "/history")
     public ResponseEntity<List<Booking>> findHistory(@RequestParam String phone) {
         List<Booking> bookings = bookingService.findHistoryByPhone(phone);
+        return ResponseEntity.ok().body(bookings);
+    }
+
+    @GetMapping(value = "/berber-schedule")
+    public ResponseEntity<List<Booking>> findByBarber(
+            @RequestParam Long barberId,
+            @RequestParam@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
+        List<Booking> bookings = bookingService.findByBarberAndDate(barberId, date);
         return ResponseEntity.ok().body(bookings);
     }
 

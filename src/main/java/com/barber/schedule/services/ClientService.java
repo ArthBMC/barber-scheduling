@@ -28,6 +28,10 @@ public class ClientService {
         return obj.get();
     }
 
+    public Client findOrCreate(String name, String phone){
+        return clientRepository.findByPhone(phone).orElse(clientRepository.save(new Client(name, phone)));
+    }
+
     public Client insert(Client obj){
         clientRepository.findByPhone(obj.getPhone()).ifPresent(c -> {
             throw new RuntimeException("This client already exists");
