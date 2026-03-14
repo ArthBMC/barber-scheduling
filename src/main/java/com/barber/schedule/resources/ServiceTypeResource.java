@@ -43,8 +43,8 @@ public class ServiceTypeResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ServiceType> updatePrice(@PathVariable Long id, @RequestBody ServiceType obj){
-        obj = serviceTypeService.updatePrice(id, obj);
+    public ResponseEntity<ServiceType> update(@PathVariable Long id, @RequestBody ServiceType obj){
+        obj = serviceTypeService.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
 

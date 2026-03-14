@@ -50,6 +50,8 @@ public class BookingService {
         booking.setClient(client);
         booking.setBarber(barber);
         booking.setServiceType(serviceType);
+        booking.setBookedPrice(serviceType.getPrice());
+        booking.setBookedDuration(serviceType.getDuration());
         booking.setMoment(bookingDTO.moment());
         booking.setBookingStatus(BookingStatus.WAITING_CONFIRMATION);
         return bookingRepository.save(booking);

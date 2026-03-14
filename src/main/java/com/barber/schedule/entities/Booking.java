@@ -2,18 +2,19 @@ package com.barber.schedule.entities;
 
 import com.barber.schedule.entities.enums.BookingStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 @Setter
+@JsonPropertyOrder({ "id", "moment", "bookedPrice", "bookedDuration", "serviceType" })
 @Entity
 @Table(name = "tb_booking")
 public class Booking implements Serializable {
@@ -35,6 +36,8 @@ public class Booking implements Serializable {
     @JoinColumn(name = "barber_id")
     private Barber barber;
 
+    private Double bookedPrice;
+    private Integer bookedDuration;
     @ManyToOne
     @JoinColumn(name = "id_service")
     private ServiceType serviceType;

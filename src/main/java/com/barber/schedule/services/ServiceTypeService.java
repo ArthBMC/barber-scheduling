@@ -1,5 +1,6 @@
 package com.barber.schedule.services;
 
+import com.barber.schedule.entities.Barber;
 import com.barber.schedule.entities.ServiceType;
 import com.barber.schedule.repositories.ServiceTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,26 @@ public class ServiceTypeService {
 
     public void delete(Long id){ serviceTypeRepository.deleteById(id);}
 
-    public ServiceType updatePrice(Long id, ServiceType obj){
-        ServiceType old = serviceTypeRepository.getReferenceById(id);
-        old.setPrice(obj.getPrice());
-        return serviceTypeRepository.save(old);
+    public ServiceType update(Long id, ServiceType obj){
+        ServiceType entity = serviceTypeRepository.getReferenceById(id);
+        updateData(entity, obj);
+        return serviceTypeRepository.save(entity);
     }
+
+    public void updateData(ServiceType entity, ServiceType obj){
+        if (obj.getName() != null){
+            entity.setName(obj.getName());
+        }
+        if (obj.getDescription() != null){
+            entity.setDescription(obj.getDescription());
+        }
+        if (obj.getPrice() != null){
+            entity.setPrice(obj.getPrice());
+        }
+        if (obj.getDuration() != null){
+            entity.setDuration(obj.getDuration());
+        }
+    }
+
 
 }
