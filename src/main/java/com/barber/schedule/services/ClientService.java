@@ -39,20 +39,4 @@ public class ClientService {
         clientRepository.deleteById(id);
     }
 
-    public Client update(Long id, Client obj){
-        Client entity = clientRepository.getReferenceById(id);
-        updateData(entity, obj);
-        return clientRepository.save(entity);
-    }
-
-    public void updateData(Client entity, Client obj){
-        if(obj.getName() != null) {
-            entity.setName(obj.getName());
-        }
-        if(obj.getPhone() != null) {
-            entity.setPhone(obj.getPhone());
-        }
-    }
-
-
 }

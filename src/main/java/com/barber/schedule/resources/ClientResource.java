@@ -36,17 +36,5 @@ public class ClientResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Client> delete(@PathVariable Long id){
-        clientService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Client> update(@PathVariable Long id, @RequestBody Client obj){
-        obj = clientService.update(id, obj);
-        return ResponseEntity.ok().body(obj);
-    }
-
 }
 

@@ -29,17 +29,10 @@ public class BarberResource {
         return ResponseEntity.ok().body(obj);
     }
 
-    @PostMapping
-    public ResponseEntity<Barber> insert(@RequestBody Barber obj){
-        obj = barberService.insert(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).body(obj);
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Barber> delete(@PathVariable Long id){
-        barberService.delete(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Barber> update(@PathVariable Long id, @RequestBody Barber obj){
+        obj = barberService.update(id, obj);
+        return ResponseEntity.ok().body(obj);
     }
 
 
