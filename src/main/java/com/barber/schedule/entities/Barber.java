@@ -31,10 +31,4 @@ public class Barber extends User implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
-    public Barber(Long id, String username, String password, String role, Barber barber, String name, String avatarUrl) {
-        super(id, username, password, role, barber);
-        this.name = name;
-        this.avatarUrl = avatarUrl;
-    }
-
 }

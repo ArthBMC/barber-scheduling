@@ -36,5 +36,18 @@ public class ServiceTypeResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
+    @DeleteMapping
+    public ResponseEntity<ServiceType> delete (@PathVariable Long id){
+        serviceTypeService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ServiceType> updatePrice(@PathVariable Long id, @RequestBody ServiceType obj){
+        obj = serviceTypeService.updatePrice(id, obj);
+        return ResponseEntity.ok().body(obj);
+    }
+
+
 }
 

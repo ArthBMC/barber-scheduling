@@ -12,19 +12,27 @@ import java.util.Optional;
 public class ServiceTypeService {
 
     @Autowired
-    private ServiceTypeRepository ServiceTypeRepository;
+    private ServiceTypeRepository serviceTypeRepository;
 
     public List<ServiceType> findAll(){
-        return ServiceTypeRepository.findAll();
+        return serviceTypeRepository.findAll();
     }
 
     public ServiceType findById(Long id){
-        Optional<ServiceType> obj = ServiceTypeRepository.findById(id);
+        Optional<ServiceType> obj = serviceTypeRepository.findById(id);
         return obj.get();
     }
 
     public ServiceType insert(ServiceType obj){
-        return ServiceTypeRepository.save(obj);
+        return serviceTypeRepository.save(obj);
+    }
+
+    public void delete(Long id){ serviceTypeRepository.deleteById(id);}
+
+    public ServiceType updatePrice(Long id, ServiceType obj){
+        ServiceType old = serviceTypeRepository.getReferenceById(id);
+        old.setPrice(obj.getPrice());
+        return serviceTypeRepository.save(old);
     }
 
 }

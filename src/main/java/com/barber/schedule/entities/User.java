@@ -25,7 +25,6 @@ public class User implements Serializable {
     private String role;
 
     @OneToOne
-    @JoinColumn(name = "barber_id")
     private Barber barber;
 
     public User(){}

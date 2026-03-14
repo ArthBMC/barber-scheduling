@@ -28,7 +28,11 @@ public class BookingService {
     }
 
     public List<Booking> findHistoryByPhone(String phone){
-        return bookingRepository.findByClientPhoneOrderByMomentDesc(phone);
+        if(phone != null) {
+            return bookingRepository.findByClientPhoneOrderByMomentDesc(phone);
+        }else {
+            return null;
+        }
     }
 
 }

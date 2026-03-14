@@ -23,7 +23,15 @@ public class ClientService {
         return obj.get();
     }
 
+    public Client findByPhone(String phone){
+        Optional<Client> obj = clientRepository.findByPhone(phone);
+        return obj.get();
+    }
+
     public Client insert(Client obj){
+        clientRepository.findByPhone(obj.getPhone()).ifPresent(c -> {
+            throw new RuntimeException("This client already exists");
+        });
         return clientRepository.save(obj);
     }
 
