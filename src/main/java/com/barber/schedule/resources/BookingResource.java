@@ -1,6 +1,7 @@
 package com.barber.schedule.resources;
 
 import com.barber.schedule.entities.Booking;
+import com.barber.schedule.entities.dtos.BookingDTO;
 import com.barber.schedule.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +31,10 @@ public class BookingResource {
     }
 
     @PostMapping
-    public ResponseEntity<Booking> insert(@RequestBody Booking obj){
-        obj = bookingService.insert(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).body(obj);
+    public ResponseEntity<Booking> insert(@RequestBody BookingDTO bookingDTO){
+        Booking booking = bookingService.insert(bookingDTO);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(booking.getId()).toUri();
+        return ResponseEntity.created(uri).body(booking);
     }
 
     @GetMapping(value = "/history")

@@ -29,8 +29,8 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Client c1 = new Client(null, "Arthur", "40028922");
-        Client c2 = new Client(null, "Raul", "5555922");
+        Client c1 = new Client("Arthur", "40028922");
+        Client c2 = new Client("Raul", "5555922");
         clientRepository.saveAll(Arrays.asList(c1, c2));
 
         ServiceType s1 = new ServiceType(null, "Corte simples", "Corte na máquina e na tesoura", 40.0, 30);

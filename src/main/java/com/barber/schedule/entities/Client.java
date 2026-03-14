@@ -30,7 +30,7 @@ public class Client implements Serializable {
 
     public Client(){}
 
-    public Client(Long id, String name, String phone) {
+    public Client(String name, String phone) {
         this.id = id;
         this.name = name;
         this.phone = phone;

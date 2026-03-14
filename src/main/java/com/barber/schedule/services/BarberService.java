@@ -21,7 +21,7 @@ public class BarberService {
 
     public Barber findById(Long id){
         Optional<Barber> obj = barberRepository.findById(id);
-        return obj.get();
+        return obj.orElseThrow(() -> new RuntimeException ("This barber does not exists"));
     }
 
     public Barber insert(Barber obj){
