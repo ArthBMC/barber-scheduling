@@ -1,6 +1,5 @@
 package com.barber.schedule.resources;
 
-import com.barber.schedule.entities.Booking;
 import com.barber.schedule.entities.Client;
 import com.barber.schedule.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;

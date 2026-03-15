@@ -8,7 +8,6 @@ import com.barber.schedule.entities.dtos.BookingDTO;
 import com.barber.schedule.entities.enums.BookingStatus;
 import com.barber.schedule.repositories.BarberRepository;
 import com.barber.schedule.repositories.BookingRepository;
-import com.barber.schedule.repositories.ClientRepository;
 import com.barber.schedule.repositories.ServiceTypeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,6 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
     @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
     private ClientService clientService;
     @Autowired
     private BarberRepository barberRepository;
@@ -40,7 +37,7 @@ public class BookingService {
 
     public Booking findById(Long id){
         Optional<Booking> obj = bookingRepository.findById(id);
-        return obj.get();
+        return obj.orElseThrow(() -> new RuntimeException("Booking not found"));
     }
 
     @Transactional
@@ -66,22 +63,13 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public void cancel(Long id){
-        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found"));
-        if (booking.getMoment().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("It's not possible to cancel a booking that already passed");
-        }
-        booking.setBookingStatus(BookingStatus.CANCELED);
-        bookingRepository.save(booking);
-    }
-
     @Transactional
-    public void updateStatus(Long id, BookingStatus newStatus){
+    public void updateStatus(Long id, Integer newStatus){
         Booking booking = bookingRepository.getReferenceById(id);
         if (booking.getBookingStatus() == BookingStatus.CANCELED){
             throw new RuntimeException("It's not possible to change a status from a booking cancelled");
         }
-        booking.setBookingStatus(newStatus);
+        booking.setBookingStatus(BookingStatus.valueOf(newStatus));
         bookingRepository.save(booking);
     }
 

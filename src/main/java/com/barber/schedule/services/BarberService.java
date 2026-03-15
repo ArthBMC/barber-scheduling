@@ -1,8 +1,6 @@
 package com.barber.schedule.services;
 
 import com.barber.schedule.entities.Barber;
-import com.barber.schedule.entities.Client;
-import com.barber.schedule.repositories.BarberRepository;
 import com.barber.schedule.repositories.BarberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,9 @@
 package com.barber.schedule.config;
 
-import com.barber.schedule.entities.*;
+import com.barber.schedule.entities.Barber;
+import com.barber.schedule.entities.Booking;
+import com.barber.schedule.entities.Client;
+import com.barber.schedule.entities.ServiceType;
 import com.barber.schedule.entities.enums.BookingStatus;
 import com.barber.schedule.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;

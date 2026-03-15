@@ -2,7 +2,6 @@ package com.barber.schedule.resources;
 
 import com.barber.schedule.entities.Booking;
 import com.barber.schedule.entities.dtos.BookingDTO;
-import com.barber.schedule.entities.enums.BookingStatus;
 import com.barber.schedule.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,7 +11,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -41,15 +39,9 @@ public class BookingResource {
         return ResponseEntity.created(uri).body(booking);
     }
 
-    @PutMapping(value = "/{id}/cancel")
-    public ResponseEntity<Void> cancel(@PathVariable Long id){
-        bookingService.cancel(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @PatchMapping(value = "/{id}/status")
     public ResponseEntity<Void> updateStatus(@PathVariable Long id,
-                                             @RequestParam BookingStatus status){
+                                             @RequestParam Integer status){
         bookingService.updateStatus(id, status);
         return ResponseEntity.noContent().build();
     }

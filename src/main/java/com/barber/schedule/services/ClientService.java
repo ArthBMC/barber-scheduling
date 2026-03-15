@@ -2,6 +2,7 @@ package com.barber.schedule.services;
 
 import com.barber.schedule.entities.Client;
 import com.barber.schedule.repositories.ClientRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,27 +21,13 @@ public class ClientService {
 
     public Client findById(Long id){
         Optional<Client> obj = clientRepository.findById(id);
-        return obj.get();
+        return obj.orElseThrow(() -> new RuntimeException("Client not found"));
     }
 
-    public Client findByPhone(String phone){
-        Optional<Client> obj = clientRepository.findByPhone(phone);
-        return obj.get();
-    }
-
+    @Transactional
     public Client findOrCreate(String name, String phone){
-        return clientRepository.findByPhone(phone).orElse(clientRepository.save(new Client(name, phone)));
-    }
-
-    public Client insert(Client obj){
-        clientRepository.findByPhone(obj.getPhone()).ifPresent(c -> {
-            throw new RuntimeException("This client already exists");
-        });
-        return clientRepository.save(obj);
-    }
-
-    public void delete(Long id){
-        clientRepository.deleteById(id);
+        return clientRepository.findByPhone(phone).
+                orElseGet(() -> clientRepository.save(new Client(name, phone)));
     }
 
 }
