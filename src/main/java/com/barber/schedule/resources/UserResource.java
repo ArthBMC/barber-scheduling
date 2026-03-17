@@ -2,6 +2,7 @@ package com.barber.schedule.resources;
 
 import com.barber.schedule.entities.User;
 import com.barber.schedule.entities.dtos.BarberDTO;
+import com.barber.schedule.entities.dtos.LoginDTO;
 import com.barber.schedule.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,24 @@ public class UserResource {
     public ResponseEntity<User> registerNewBarber(@RequestBody BarberDTO barberDTO){
         User newBarber = userService.registerNewBarber(barberDTO);
         return ResponseEntity.ok().body(newBarber);
+    }
+
+    @PostMapping(value = "/login")
+    public ResponseEntity<User> login(@RequestBody LoginDTO loginDTO){
+        User user = userService.login(loginDTO);
+        return ResponseEntity.ok().body(user);
+    }
+
+    @PatchMapping(value = "/{id}/username")
+    public ResponseEntity<User> updateUsername(@PathVariable Long id, @RequestBody LoginDTO loginDTO){
+        User updatedUser = userService.updateUsername(id, loginDTO.username());
+        return ResponseEntity.ok().body(updatedUser);
+    }
+
+    @PatchMapping(value = "/{id}/password")
+    public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody LoginDTO loginDTO){
+        userService.updatePassword(id, loginDTO.password());
+        return ResponseEntity.noContent().build();
     }
 
 }

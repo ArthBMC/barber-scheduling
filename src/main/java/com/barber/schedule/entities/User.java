@@ -1,5 +1,6 @@
 package com.barber.schedule.entities;
 
+import com.barber.schedule.entities.enums.UserRoles;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,15 +23,14 @@ public class User implements Serializable {
     @Column(unique = true)
     private String username;
     private String password;
-    private String role;
+    private UserRoles role;
 
     @OneToOne
     private Barber barber;
 
     public User(){}
 
-    public User(Long id, String username, String password, String role) {
-        this.id = id;
+    public User(String username, String password, UserRoles role) {
         this.username = username;
         this.password = password;
         this.role = role;
