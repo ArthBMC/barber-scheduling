@@ -9,6 +9,7 @@ import com.barber.schedule.repositories.BarberRepository;
 import com.barber.schedule.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private BarberRepository barberRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -38,7 +41,7 @@ public class UserService {
 
         User baberUser = new User();
         baberUser.setUsername(barberDTO.username());
-        baberUser.setPassword(barberDTO.password());
+        baberUser.setPassword(passwordEncoder.encode(barberDTO.password()));
         baberUser.setRole(UserRoles.BARBER);
         baberUser.setBarber(barber);
         return userRepository.save(baberUser);
@@ -51,14 +54,14 @@ public class UserService {
         }
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setRole(UserRoles.ADMIN);
         return userRepository.save(user);
     }
 
     public User login(LoginDTO loginDTO) {
         User user = userRepository.findByUsername(loginDTO.username()).orElseThrow(() -> new RuntimeException("User or Password invalid."));
-        if (!user.getPassword().equals(loginDTO.password())) {
+        if (!passwordEncoder.matches(loginDTO.password(), user.getPassword())) {
             throw new RuntimeException("User or Password invalid.");
         }
         return user;
@@ -72,10 +75,10 @@ public class UserService {
     }
 
     @Transactional
-    public User updatePassword(Long id, String newPassword) {
+    public void updatePassword(Long id, String newPassword) {
         User entity = userRepository.getReferenceById(id);
-        entity.setPassword(newPassword);
-        return userRepository.save(entity);
+        entity.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(entity);
     }
 
 

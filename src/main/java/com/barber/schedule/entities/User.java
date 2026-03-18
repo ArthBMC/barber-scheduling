@@ -1,6 +1,7 @@
 package com.barber.schedule.entities;
 
 import com.barber.schedule.entities.enums.UserRoles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class User implements Serializable {
     private Long id;
     @Column(unique = true)
     private String username;
+    @JsonIgnore
     private String password;
     private UserRoles role;
 

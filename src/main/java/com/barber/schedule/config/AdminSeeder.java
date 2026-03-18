@@ -7,12 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class AdminSeeder implements CommandLineRunner {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Value("${app.admin.username}")
     private String adminUsername;
@@ -26,7 +30,7 @@ public class AdminSeeder implements CommandLineRunner {
 
             User admin = new User();
             admin.setUsername(adminUsername);
-            admin.setPassword(adminPassword);
+            admin.setPassword(passwordEncoder.encode(adminPassword));
             admin.setRole(UserRoles.ADMIN);
 
             userRepository.save(admin);
