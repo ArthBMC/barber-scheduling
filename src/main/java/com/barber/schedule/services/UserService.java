@@ -4,6 +4,7 @@ import com.barber.schedule.entities.Barber;
 import com.barber.schedule.entities.User;
 import com.barber.schedule.entities.dtos.BarberDTO;
 import com.barber.schedule.entities.dtos.LoginDTO;
+import com.barber.schedule.entities.dtos.LoginResponseDTO;
 import com.barber.schedule.entities.enums.UserRoles;
 import com.barber.schedule.repositories.BarberRepository;
 import com.barber.schedule.repositories.UserRepository;
@@ -24,6 +25,8 @@ public class UserService {
     private BarberRepository barberRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private TokenService tokenService;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -31,6 +34,11 @@ public class UserService {
 
     public User findById(Long id) {
         Optional<User> obj = userRepository.findById(id);
+        return obj.orElseThrow(() -> new RuntimeException("This user does not exists."));
+    }
+
+    public User findByUsername(String username) {
+        Optional<User> obj = userRepository.findByUsername(username);
         return obj.orElseThrow(() -> new RuntimeException("This user does not exists."));
     }
 
@@ -59,12 +67,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User login(LoginDTO loginDTO) {
+    public LoginResponseDTO login(LoginDTO loginDTO) {
         User user = userRepository.findByUsername(loginDTO.username()).orElseThrow(() -> new RuntimeException("User or Password invalid."));
         if (!passwordEncoder.matches(loginDTO.password(), user.getPassword())) {
             throw new RuntimeException("User or Password invalid.");
         }
-        return user;
+        return new LoginResponseDTO(tokenService.generateToken(user));
     }
 
     @Transactional

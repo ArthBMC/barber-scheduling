@@ -3,6 +3,7 @@ package com.barber.schedule.resources;
 import com.barber.schedule.entities.User;
 import com.barber.schedule.entities.dtos.BarberDTO;
 import com.barber.schedule.entities.dtos.LoginDTO;
+import com.barber.schedule.entities.dtos.LoginResponseDTO;
 import com.barber.schedule.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,9 @@ public class UserResource {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<User> login(@RequestBody LoginDTO loginDTO){
-        User user = userService.login(loginDTO);
-        return ResponseEntity.ok().body(user);
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO){
+        LoginResponseDTO response = userService.login(loginDTO);
+        return ResponseEntity.ok().body(response);
     }
 
     @PatchMapping(value = "/{id}/username")
