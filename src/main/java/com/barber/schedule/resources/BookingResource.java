@@ -52,7 +52,7 @@ public class BookingResource {
         return ResponseEntity.ok().body(bookings);
     }
 
-    @GetMapping(value = "/berber-schedule")
+    @GetMapping(value = "/barber-schedule")
     public ResponseEntity<List<Booking>> findByBarber(
             @RequestParam Long barberId,
             @RequestParam@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
