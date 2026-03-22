@@ -42,7 +42,10 @@ public class BookingService {
 
     @Transactional
     public Booking insert(BookingDTO bookingDTO){
-
+        int minutes = bookingDTO.moment().getMinute();
+        if (minutes != 0 && minutes != 30){
+            throw new RuntimeException("Bookings can only be scheduled for full hours or half-hours (for example 14:00 or 14:30)");
+        }
         if (bookingDTO.moment().isBefore(LocalDateTime.now())){
             throw new RuntimeException("You cannot schedule a past date");
         }
@@ -64,12 +67,12 @@ public class BookingService {
     }
 
     @Transactional
-    public void updateStatus(Long id, Integer newStatus){
+    public void updateStatus(Long id, BookingStatus newStatus){
         Booking booking = bookingRepository.getReferenceById(id);
         if (booking.getBookingStatus() == BookingStatus.CANCELED){
             throw new RuntimeException("It's not possible to change a status from a booking cancelled");
         }
-        booking.setBookingStatus(BookingStatus.valueOf(newStatus));
+        booking.setBookingStatus(newStatus);
         bookingRepository.save(booking);
     }
 

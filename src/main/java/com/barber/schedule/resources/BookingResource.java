@@ -2,6 +2,7 @@ package com.barber.schedule.resources;
 
 import com.barber.schedule.entities.Booking;
 import com.barber.schedule.entities.dtos.BookingDTO;
+import com.barber.schedule.entities.enums.BookingStatus;
 import com.barber.schedule.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,7 +42,7 @@ public class BookingResource {
 
     @PatchMapping(value = "/{id}/status")
     public ResponseEntity<Void> updateStatus(@PathVariable Long id,
-                                             @RequestParam Integer status){
+                                             @RequestParam BookingStatus status){
         bookingService.updateStatus(id, status);
         return ResponseEntity.noContent().build();
     }

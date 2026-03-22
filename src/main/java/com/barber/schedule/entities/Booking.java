@@ -42,7 +42,7 @@ public class Booking implements Serializable {
     @JoinColumn(name = "id_service")
     private ServiceType serviceType;
 
-    private Integer bookingStatus;
+    private BookingStatus bookingStatus;
 
     public Booking(){}
 
@@ -55,13 +55,9 @@ public class Booking implements Serializable {
         this.barber = barber;
     }
 
-    public BookingStatus getBookingStatus(){
-        return BookingStatus.valueOf(bookingStatus);
-    }
-
     public void setBookingStatus(BookingStatus bookingStatus){
         if(bookingStatus != null) {
-            this.bookingStatus = bookingStatus.getCode();
+            this.bookingStatus = bookingStatus;
         }
     }
 

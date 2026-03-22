@@ -27,6 +27,12 @@ public class Barber implements Serializable {
     @OneToMany(mappedBy = "barber")
     private List<Booking> bookings;
 
+    @OneToMany(mappedBy = "barber")
+    private List<BarberSchedule> barberSchedule;
+
+    @OneToMany(mappedBy = "barber")
+    private List<BarberBlock> barberBlocks;
+
     public Barber() {}
 
     public Barber(String name, String avatarUrl) {
