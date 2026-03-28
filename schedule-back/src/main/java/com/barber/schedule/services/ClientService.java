@@ -1,6 +1,7 @@
 package com.barber.schedule.services;
 
 import com.barber.schedule.entities.Client;
+import com.barber.schedule.exceptions.NotFoundException;
 import com.barber.schedule.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class ClientService {
 
     public Client findById(Long id){
         Optional<Client> obj = clientRepository.findById(id);
-        return obj.orElseThrow(() -> new RuntimeException("Client not found"));
+        return obj.orElseThrow(() -> new NotFoundException("Client with id " + id + " not found"));
     }
 
     @Transactional

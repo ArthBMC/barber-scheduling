@@ -7,6 +7,8 @@ import com.barber.schedule.entities.Booking;
 import com.barber.schedule.entities.dtos.BarberBlockDTO;
 import com.barber.schedule.entities.dtos.BarberScheduleDTO;
 import com.barber.schedule.entities.enums.BookingStatus;
+import com.barber.schedule.exceptions.NotFoundException;
+import com.barber.schedule.exceptions.PastDateException;
 import com.barber.schedule.repositories.BarberBlockRepository;
 import com.barber.schedule.repositories.BarberRepository;
 import com.barber.schedule.repositories.BarberScheduleRepository;
@@ -83,7 +85,7 @@ public class ScheduleService {
     public List<BarberSchedule> syncSchedule(Long barberId, List<BarberScheduleDTO> dto){
 
         Barber barber = barberRepository.findById(barberId)
-                .orElseThrow(() -> new RuntimeException("Barber not found"));
+                .orElseThrow(() -> new NotFoundException("Barber with id " + barberId + " not found."));
 
         barberScheduleRepository.deleteByBarberId(barberId);
 
@@ -104,7 +106,7 @@ public class ScheduleService {
     @Transactional
     public BarberBlock blockSchedule(Long barberId, BarberBlockDTO barberBlockDTO){
         if (barberBlockDTO.startTime().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("You cannot block a past date.");
+            throw new PastDateException("You cannot block a past date.");
         }
 
         BarberBlock barberBlock = new BarberBlock();
@@ -119,7 +121,7 @@ public class ScheduleService {
     @Transactional
     public void unlockSchedule(Long blockId){
         if (!barberBlockRepository.existsById(blockId)) {
-            throw new RuntimeException("Block not found.");
+            throw new NotFoundException("Block with id " + blockId + " not found.");
         }
         barberBlockRepository.deleteById(blockId);
     }

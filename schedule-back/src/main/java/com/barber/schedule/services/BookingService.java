@@ -6,6 +6,10 @@ import com.barber.schedule.entities.Client;
 import com.barber.schedule.entities.ServiceType;
 import com.barber.schedule.entities.dtos.BookingDTO;
 import com.barber.schedule.entities.enums.BookingStatus;
+import com.barber.schedule.exceptions.InvalidTimeException;
+import com.barber.schedule.exceptions.NotFoundException;
+import com.barber.schedule.exceptions.PastDateException;
+import com.barber.schedule.exceptions.UpdateCancelledBookingException;
 import com.barber.schedule.repositories.BarberRepository;
 import com.barber.schedule.repositories.BookingRepository;
 import com.barber.schedule.repositories.ServiceTypeRepository;
@@ -37,23 +41,26 @@ public class BookingService {
 
     public Booking findById(Long id){
         Optional<Booking> obj = bookingRepository.findById(id);
-        return obj.orElseThrow(() -> new RuntimeException("Booking not found"));
+        return obj.orElseThrow(() -> new NotFoundException("Booking with id " + id + " not found."));
     }
 
     @Transactional
     public Booking insert(BookingDTO bookingDTO){
         int minutes = bookingDTO.moment().getMinute();
         if (minutes != 0 && minutes != 30){
-            throw new RuntimeException("Bookings can only be scheduled for full hours or half-hours (for example 14:00 or 14:30)");
+            throw new InvalidTimeException("Bookings can only be scheduled for full hours or half-hours (for example 14:00 or 14:30).");
         }
         if (bookingDTO.moment().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("You cannot schedule a past date");
+            throw new PastDateException("You cannot schedule a past date.");
         }
 
         Client client = clientService.findOrCreate(bookingDTO.clientName(), bookingDTO.clientPhone());
 
-        Barber barber = barberRepository.findById(bookingDTO.barberId()).orElseThrow(() -> new RuntimeException("Barber not found"));
-        ServiceType serviceType = serviceTypeRepository.findById(bookingDTO.serviceTypeId()).orElseThrow(() -> new RuntimeException("Service not found"));
+        Barber barber = barberRepository.findById(bookingDTO.barberId())
+                .orElseThrow(() -> new NotFoundException("Barber with id " + bookingDTO.barberId() + " not found"));
+
+        ServiceType serviceType = serviceTypeRepository.findById(bookingDTO.serviceTypeId())
+                .orElseThrow(() -> new NotFoundException("Barber with id " + bookingDTO.serviceTypeId() + " not found"));
 
         Booking booking = new Booking();
         booking.setClient(client);
@@ -70,7 +77,7 @@ public class BookingService {
     public void updateStatus(Long id, BookingStatus newStatus){
         Booking booking = bookingRepository.getReferenceById(id);
         if (booking.getBookingStatus() == BookingStatus.CANCELED){
-            throw new RuntimeException("It's not possible to change a status from a booking cancelled");
+            throw new UpdateCancelledBookingException();
         }
         booking.setBookingStatus(newStatus);
         bookingRepository.save(booking);

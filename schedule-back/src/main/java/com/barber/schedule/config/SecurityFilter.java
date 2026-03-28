@@ -1,6 +1,7 @@
 package com.barber.schedule.config;
 
 import com.barber.schedule.entities.User;
+import com.barber.schedule.exceptions.NotFoundException;
 import com.barber.schedule.repositories.UserRepository;
 import com.barber.schedule.services.TokenService;
 import jakarta.servlet.FilterChain;
@@ -36,7 +37,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             if(!login.isEmpty()){
                 User user = userRepository.findByUsername(login)
-                        .orElseThrow(() -> new RuntimeException("This user does not exists"));
+                        .orElseThrow(() -> new NotFoundException("This user does not exists"));
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

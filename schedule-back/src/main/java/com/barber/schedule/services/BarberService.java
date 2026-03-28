@@ -1,6 +1,7 @@
 package com.barber.schedule.services;
 
 import com.barber.schedule.entities.Barber;
+import com.barber.schedule.exceptions.NotFoundException;
 import com.barber.schedule.repositories.BarberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class BarberService {
 
     public Barber findById(Long id){
         Optional<Barber> obj = barberRepository.findById(id);
-        return obj.orElseThrow(() -> new RuntimeException ("This barber does not exists"));
+        return obj.orElseThrow(() -> new NotFoundException("Barber with id " + id + " not found"));
     }
 
     public Barber update(Long id, Barber obj){

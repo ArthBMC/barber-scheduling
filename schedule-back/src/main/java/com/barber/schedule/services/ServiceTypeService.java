@@ -1,6 +1,7 @@
 package com.barber.schedule.services;
 
 import com.barber.schedule.entities.ServiceType;
+import com.barber.schedule.exceptions.NotFoundException;
 import com.barber.schedule.repositories.ServiceTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class ServiceTypeService {
 
     public ServiceType findById(Long id){
         Optional<ServiceType> obj = serviceTypeRepository.findById(id);
-        return obj.get();
+        return obj.orElseThrow(() -> new NotFoundException("Service with id " + id + " not found"));
     }
 
     public ServiceType insert(ServiceType obj){

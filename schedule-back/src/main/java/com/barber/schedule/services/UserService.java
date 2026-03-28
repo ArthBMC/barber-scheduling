@@ -6,6 +6,9 @@ import com.barber.schedule.entities.dtos.BarberDTO;
 import com.barber.schedule.entities.dtos.LoginDTO;
 import com.barber.schedule.entities.dtos.LoginResponseDTO;
 import com.barber.schedule.entities.enums.UserRoles;
+import com.barber.schedule.exceptions.ExistentUsernameException;
+import com.barber.schedule.exceptions.InvalidLoginCredentialsException;
+import com.barber.schedule.exceptions.NotFoundException;
 import com.barber.schedule.repositories.BarberRepository;
 import com.barber.schedule.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -34,16 +37,20 @@ public class UserService {
 
     public User findById(Long id) {
         Optional<User> obj = userRepository.findById(id);
-        return obj.orElseThrow(() -> new RuntimeException("This user does not exists."));
+        return obj.orElseThrow(() -> new NotFoundException("User with id " + id + " not found"));
     }
 
     public User findByUsername(String username) {
         Optional<User> obj = userRepository.findByUsername(username);
-        return obj.orElseThrow(() -> new RuntimeException("This user does not exists."));
+        return obj.orElseThrow(() -> new NotFoundException("User with username " + username + " not found"));
     }
 
     @Transactional
     public User registerNewBarber(BarberDTO barberDTO) {
+        if (userRepository.existsByUsername(barberDTO.username())) {
+            throw new ExistentUsernameException("This username already exists.");
+        }
+
         Barber barber = new Barber(barberDTO.name(), barberDTO.avatarUrl());
         barberRepository.save(barber);
 
@@ -58,7 +65,7 @@ public class UserService {
     @Transactional
     public User createAdmin(String username, String password) {
         if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("This username already exists");
+            throw new ExistentUsernameException("This username already exists.");
         }
         User user = new User();
         user.setUsername(username);
@@ -68,9 +75,10 @@ public class UserService {
     }
 
     public LoginResponseDTO login(LoginDTO loginDTO) {
-        User user = userRepository.findByUsername(loginDTO.username()).orElseThrow(() -> new RuntimeException("User or Password invalid."));
+        User user = userRepository.findByUsername(loginDTO.username())
+                .orElseThrow(() -> new InvalidLoginCredentialsException("User or Password invalid."));
         if (!passwordEncoder.matches(loginDTO.password(), user.getPassword())) {
-            throw new RuntimeException("User or Password invalid.");
+            throw new InvalidLoginCredentialsException("User or Password invalid.");
         }
         return new LoginResponseDTO(tokenService.generateToken(user));
     }
