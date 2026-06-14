@@ -1,9 +1,6 @@
-package com.barber.schedule.config;
+package com.barber.schedule.config.security;
 
-import com.barber.schedule.entities.User;
-import com.barber.schedule.exceptions.NotFoundException;
 import com.barber.schedule.repositories.UserRepository;
-import com.barber.schedule.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +9,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -36,8 +34,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             var login = tokenService.validateToken(token);
 
             if(!login.isEmpty()){
-                User user = userRepository.findByUsername(login)
-                        .orElseThrow(() -> new NotFoundException("This user does not exists"));
+                UserDetails user = userRepository.findByUsername(login);
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
@@ -53,3 +50,4 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
 }
+

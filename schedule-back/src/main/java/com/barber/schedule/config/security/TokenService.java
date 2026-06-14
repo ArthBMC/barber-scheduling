@@ -1,4 +1,4 @@
-package com.barber.schedule.services;
+package com.barber.schedule.config.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -47,7 +47,7 @@ public class TokenService {
     }
 
     private Instant getExpirationDate(){
-        return LocalDateTime.now().plusMinutes(15).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }
 

@@ -2,9 +2,8 @@ package com.barber.schedule.services;
 
 import com.barber.schedule.entities.Barber;
 import com.barber.schedule.entities.User;
-import com.barber.schedule.entities.dtos.BarberDTO;
 import com.barber.schedule.entities.dtos.LoginDTO;
-import com.barber.schedule.entities.dtos.LoginResponseDTO;
+import com.barber.schedule.entities.dtos.RegisterDTO;
 import com.barber.schedule.entities.enums.UserRoles;
 import com.barber.schedule.exceptions.ExistentUsernameException;
 import com.barber.schedule.exceptions.InvalidLoginCredentialsException;
@@ -13,7 +12,7 @@ import com.barber.schedule.repositories.BarberRepository;
 import com.barber.schedule.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,10 +25,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private BarberRepository barberRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private TokenService tokenService;
+    //@Autowired
+    //private PasswordEncoder passwordEncoder;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -40,13 +37,14 @@ public class UserService {
         return obj.orElseThrow(() -> new NotFoundException("User with id " + id + " not found"));
     }
 
-    public User findByUsername(String username) {
-        Optional<User> obj = userRepository.findByUsername(username);
-        return obj.orElseThrow(() -> new NotFoundException("User with username " + username + " not found"));
+    public UserDetails findByUsername(String username) {
+        UserDetails user = userRepository.findByUsername(username);
+        if (user == null) {throw new InvalidLoginCredentialsException("User or Password invalid.");}
+        return user;
     }
 
     @Transactional
-    public User registerNewBarber(BarberDTO barberDTO) {
+    public void registerNewBarber(RegisterDTO barberDTO, String password) {
         if (userRepository.existsByUsername(barberDTO.username())) {
             throw new ExistentUsernameException("This username already exists.");
         }
@@ -56,31 +54,33 @@ public class UserService {
 
         User baberUser = new User();
         baberUser.setUsername(barberDTO.username());
-        baberUser.setPassword(passwordEncoder.encode(barberDTO.password()));
+        //baberUser.setPassword(passwordEncoder.encode(barberDTO.password()));
+        baberUser.setPassword(password);
         baberUser.setRole(UserRoles.BARBER);
         baberUser.setBarber(barber);
-        return userRepository.save(baberUser);
+        userRepository.save(baberUser);
     }
 
     @Transactional
-    public User createAdmin(String username, String password) {
+    public void createAdmin(String username, String password) {
         if (userRepository.existsByUsername(username)) {
             throw new ExistentUsernameException("This username already exists.");
         }
         User user = new User();
         user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
+        //user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(password);
         user.setRole(UserRoles.ADMIN);
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
-    public LoginResponseDTO login(LoginDTO loginDTO) {
-        User user = userRepository.findByUsername(loginDTO.username())
-                .orElseThrow(() -> new InvalidLoginCredentialsException("User or Password invalid."));
-        if (!passwordEncoder.matches(loginDTO.password(), user.getPassword())) {
+    public LoginDTO login(LoginDTO loginDTO) {
+        UserDetails user = userRepository.findByUsername(loginDTO.username());
+              if (user == null) {throw new InvalidLoginCredentialsException("User or Password invalid.");}
+        if (!loginDTO.password().equals(user.getPassword())) {
             throw new InvalidLoginCredentialsException("User or Password invalid.");
         }
-        return new LoginResponseDTO(tokenService.generateToken(user));
+        return loginDTO;
     }
 
     @Transactional
@@ -93,7 +93,8 @@ public class UserService {
     @Transactional
     public void updatePassword(Long id, String newPassword) {
         User entity = userRepository.getReferenceById(id);
-        entity.setPassword(passwordEncoder.encode(newPassword));
+        //entity.setPassword(passwordEncoder.encode(newPassword));
+        entity.setPassword(newPassword);
         userRepository.save(entity);
     }
 
