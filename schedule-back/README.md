@@ -75,5 +75,5 @@ Com a aplicação rodando, acesse a documentação interativa via Swagger UI:
 
 ---
 
-## 🔙 Voltar para o Root
+## 🔙 Voltar
 [Clique aqui para voltar ao README principal do projeto.](../README.md)

@@ -1,16 +1,43 @@
-# React + Vite
+# 🖥️ Barbearia Schedule - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Módulo de interface do usuário para a plataforma **Barbearia Schedule**. Desenvolvido com foco em velocidade, estética e facilidade de uso.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🎨 Design e UI
+O projeto utiliza ferramentas modernas para garantir uma interface profissional:
+- **React + Vite:** Para um ambiente de desenvolvimento ultra-rápido.
+- **Tailwind CSS:** Para estilização responsiva e customização ágil.
+- **Shadcn/UI:** Componentes de interface polidos e acessíveis.
+- **Lucide React:** Conjunto de ícones consistentes.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Status das Funcionalidades
+- [x] **Layout Base:** Header, Footer e estrutura de containers.
+- [x] **Página de Serviços:** Listagem de serviços com Cards dinâmicos.
+- [x] **Página de Login:** Formulário base para autenticação.
+- [x] **Sistema de Rotas:** Navegação entre páginas configurada.
+- [ ] **Consumo de API:** (Em breve) Integração com o backend para dados reais.
+- [ ] **Fluxo de Reserva:** (Em breve) Seleção de data e barbeiro diretamente na interface.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Como Executar
+
+1.  Certifique-se de ter o **Node.js** instalado.
+2.  Navegue até esta pasta: `cd schedule-front`.
+3.  Instale as dependências:
+    ```bash
+    npm install
+    ```
+4.  Inicie o servidor local:
+    ```bash
+    npm run dev
+    ```
+5.  Acesse `http://localhost:5173`.
+
+---
+
+## 🔙 Voltar
+[Clique aqui para voltar ao README principal do projeto.](../README.md)
