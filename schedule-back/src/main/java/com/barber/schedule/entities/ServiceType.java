@@ -33,8 +33,7 @@ public class ServiceType implements Serializable {
 
     public ServiceType(){}
 
-    public ServiceType(Long id, String name, String description, Double price, Integer duration) {
-        this.id = id;
+    public ServiceType(String name, String description, Double price, Integer duration) {
         this.name = name;
         this.description = description;
         this.price = price;
