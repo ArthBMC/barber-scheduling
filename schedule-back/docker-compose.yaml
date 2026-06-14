@@ -1,0 +1,18 @@
+services:
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: postgres_barbearia_dev
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_barbearia:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data_barbearia:
