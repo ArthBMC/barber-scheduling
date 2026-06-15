@@ -56,7 +56,7 @@ O ecossistema é dividido em dois módulos principais:
 
 ## 🏁 Como Começar
 
-1.  **Clone o repositório:** `git clone https://github.com/seu-usuario/schedule.git`
+1.  **Clone o repositório:** `git clone https://github.com/ArthBMC/barber-scheduling.git`
 2.  **Configure o Backend:** Veja as instruções em [./schedule-back/README.md](./schedule-back/README.md).
 3.  **Configure o Frontend:** Veja as instruções em [./schedule-front/README.md](./schedule-front/README.md).
 
