@@ -3,10 +3,8 @@ package com.barber.schedule.services;
 import com.barber.schedule.entities.Barber;
 import com.barber.schedule.entities.BarberBlock;
 import com.barber.schedule.entities.BarberSchedule;
-import com.barber.schedule.entities.Booking;
 import com.barber.schedule.entities.dtos.BarberBlockDTO;
 import com.barber.schedule.entities.dtos.BarberScheduleDTO;
-import com.barber.schedule.entities.enums.BookingStatus;
 import com.barber.schedule.exceptions.NotFoundException;
 import com.barber.schedule.exceptions.PastDateException;
 import com.barber.schedule.repositories.BarberBlockRepository;
@@ -20,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,8 @@ public class ScheduleService {
     public List<LocalTime> getAvailableSchedule(Long barberId, LocalDate bookingDate) {
         List<LocalTime> availableTimes = new ArrayList<>();
 
-        List<BarberSchedule> schedules = barberScheduleRepository.findByBarberIdAndDayOfWeek(barberId, bookingDate.getDayOfWeek());
+        List<BarberSchedule> schedules = barberScheduleRepository
+                .findByBarberIdAndDayOfWeek(barberId, bookingDate.getDayOfWeek());
 
         if (schedules.isEmpty()){
             return availableTimes;
@@ -52,21 +52,16 @@ public class ScheduleService {
             }
         }
 
-        List<Booking> bookings = bookingRepository.findByBarberIdAndMomentBetweenAndBookingStatusNot(barberId, bookingDate.atStartOfDay(),
-                bookingDate.atTime(LocalTime.MAX), BookingStatus.CANCELED);
-
-        for (Booking booking : bookings){
-            LocalTime bookedTime = booking.getMoment().toLocalTime();
-            availableTimes.remove(bookedTime);
-        }
-
-        if (bookingDate.isEqual(LocalDate.now())){
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
+        if (bookingDate.isEqual(LocalDate.now(zone))){
             LocalTime now = LocalTime.now();
             availableTimes.removeIf(time -> time.isBefore(now));
         }
 
-        List<BarberBlock> blocks = barberBlockRepository.findByBarberIdAndStartTimeBeforeAndEndTimeAfter(barberId,
-                bookingDate.atTime(LocalTime.MAX), bookingDate.atStartOfDay());
+        List<BarberBlock> blocks = barberBlockRepository.findByBarberIdAndStartTimeBeforeAndEndTimeAfter(
+                barberId,
+                bookingDate.atTime(LocalTime.MAX),
+                bookingDate.atStartOfDay());
 
         availableTimes.removeIf(timeSlot -> {
             LocalDateTime slotMoment = bookingDate.atTime(timeSlot);
@@ -113,7 +108,6 @@ public class ScheduleService {
         barberBlock.setBarber(barberRepository.findById(barberId).orElseThrow());
         barberBlock.setStartTime(barberBlockDTO.startTime());
         barberBlock.setEndTime(barberBlockDTO.endTime());
-        barberBlockRepository.save(barberBlock);
 
         return barberBlockRepository.save(barberBlock);
     }

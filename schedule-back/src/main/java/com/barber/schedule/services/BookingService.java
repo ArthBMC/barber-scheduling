@@ -4,6 +4,7 @@ import com.barber.schedule.entities.Barber;
 import com.barber.schedule.entities.Booking;
 import com.barber.schedule.entities.Client;
 import com.barber.schedule.entities.ServiceType;
+import com.barber.schedule.entities.dtos.BarberBlockDTO;
 import com.barber.schedule.entities.dtos.BookingDTO;
 import com.barber.schedule.entities.enums.BookingStatus;
 import com.barber.schedule.exceptions.InvalidTimeException;
@@ -34,6 +35,8 @@ public class BookingService {
     private BarberRepository barberRepository;
     @Autowired
     private ServiceTypeRepository serviceTypeRepository;
+    @Autowired
+    private ScheduleService scheduleService;
 
     public List<Booking> findAll(){
         return bookingRepository.findAll();
@@ -61,6 +64,10 @@ public class BookingService {
 
         ServiceType serviceType = serviceTypeRepository.findById(bookingDTO.serviceTypeId())
                 .orElseThrow(() -> new NotFoundException("Barber with id " + bookingDTO.serviceTypeId() + " not found"));
+
+        int duration = serviceType.getDuration();
+        scheduleService.blockSchedule(barber.getId(), new BarberBlockDTO(bookingDTO.moment(),
+                bookingDTO.moment().plusMinutes(duration)));
 
         Booking booking = new Booking();
         booking.setClient(client);

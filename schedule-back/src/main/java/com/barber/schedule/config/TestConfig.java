@@ -36,9 +36,9 @@ public class TestConfig implements CommandLineRunner {
         Client c2 = new Client("Raul", "5555922");
         clientRepository.saveAll(Arrays.asList(c1, c2));
 
-        ServiceType s1 = new ServiceType(null, "Corte simples", "Corte na máquina e na tesoura", 40.0, 30);
-        ServiceType s2 = new ServiceType(null, "Barba", "Barba feita", 15.0, 10);
-        ServiceType s3 = new ServiceType(null, "Barba e cabelo", "COmpletinho", 55.0, 40);
+        ServiceType s1 = new ServiceType("Corte simples", "Corte na máquina e na tesoura", 40.0, 30);
+        ServiceType s2 = new ServiceType("Barba", "Barba feita", 15.0, 10);
+        ServiceType s3 = new ServiceType("Barba e cabelo", "COmpletinho", 55.0, 40);
         serviceTypeRepository.saveAll(Arrays.asList(s1, s2, s3));
 
         Barber barber1 = new Barber("Diego", "gsfsdsdf");
